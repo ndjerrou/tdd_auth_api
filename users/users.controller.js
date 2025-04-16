@@ -1,5 +1,6 @@
 const User = require('./users.model');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   login: async (req, res) => {
@@ -21,7 +22,12 @@ module.exports = {
         return res.status(400).send({ ok: false, msg: 'Bad request' });
       }
 
-      res.status(200).send('abcckckck');
+      const token = user.generateAuthToken();
+
+      res.set('x-auth-token', token);
+      res.status(201).send({ ok: true, msg: 'User created' });
+
+      res.status(200).send();
     } catch (err) {
       res.status(500).send(err.message);
     }
@@ -60,7 +66,10 @@ module.exports = {
       user.password = hashedPassword;
       await user.save();
 
-      res.status(201).send('sqokslkqsokqosoqk');
+      const token = user.generateAuthToken();
+
+      res.set('x-auth-token', token);
+      res.status(201).send({ ok: true, msg: 'User created' });
     } catch (err) {
       res
         .status(500)

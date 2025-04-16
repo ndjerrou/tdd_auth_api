@@ -78,3 +78,5 @@ describe('Test LOGIN', () => {
     expect(res.statusCode).toBe(500);
   });
 });
+
+// Test if a token is correctly sent to the client for signup/login

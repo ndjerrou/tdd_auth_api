@@ -5,4 +5,19 @@ const userSchema = new mongoose.Schema({
   password: { required: true, type: String },
 });
 
-module.exports = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+userSchema.methods.generateAuthToken = function () {
+  let token = null;
+
+  jwt.sign(
+    { id: user._id },
+    process.env.JWT_PRIVATEKEY,
+    (err, generatedToken) => {
+      token = generatedToken;
+    }
+  );
+  return token;
+};
+
+module.exports = User;
