@@ -1,5 +1,5 @@
 const User = require('./users.model');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   login: async (req, res) => {
@@ -7,8 +7,6 @@ module.exports = {
 
     try {
       const user = await User.findOne({ email });
-
-      console.log('useer = ', user);
 
       if (!user)
         return res
@@ -18,7 +16,6 @@ module.exports = {
       const isCorrectPassword = await bcrypt.compare(password, user.password);
 
       if (!isCorrectPassword) {
-        console.log('incorrect password');
         return res.status(400).send({ ok: false, msg: 'Bad request' });
       }
 
@@ -42,9 +39,7 @@ module.exports = {
         password,
       });
 
-      bcrypt.hash(password, 8, (err, hash) => {
-        user.password = hash;
-      });
+      const hashedPassword = await bcrypt.hash(password, 8);
 
       // Trigger a 500 error
 
@@ -60,6 +55,7 @@ module.exports = {
           .send({ ok: false, msg: 'Server error, plz try again later' });
       }
 
+      user.password = hashedPassword;
       await user.save();
 
       res.status(201).send('sqokslkqsokqosoqk');

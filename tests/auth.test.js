@@ -47,6 +47,10 @@ describe('Test SIGNUP', () => {
 });
 
 describe('Test LOGIN', () => {
+  // 200 - User connected, sends back a token
+  // 400 - Bad request, problem with the incoming body
+  // 500 - Error server
+
   it('Should return 400 if user is not registered', async () => {
     const res = await request(app).post('/auth/login').send({
       email: 'test123@gmail.com',
@@ -57,10 +61,6 @@ describe('Test LOGIN', () => {
   });
 
   it('Should return 200 if user has an account', async () => {
-    // 200 - User connected, sends back a token
-    // 400 - Bad request, problem with the incoming body
-    // 500 - Error server
-
     const res = await request(app).post('/auth/login').send({
       email: 'test@gmail.com',
       password: 'test',
