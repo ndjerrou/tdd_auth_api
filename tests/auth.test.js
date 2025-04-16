@@ -68,4 +68,13 @@ describe('Test LOGIN', () => {
 
     expect(res.statusCode).toBe(200);
   });
+
+  it('Should return 500 if there is a server error', async () => {
+    const res = await request(app).post('/auth/login').send({
+      email: 'test2@gmail.com',
+      password: 'test2',
+    });
+
+    expect(res.statusCode).toBe(500);
+  });
 });

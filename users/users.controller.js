@@ -8,6 +8,8 @@ module.exports = {
     try {
       const user = await User.findOne({ email });
 
+      if (email === 'test2@gmail.com') throw new Error('Simulation');
+
       if (!user)
         return res
           .status(400)
