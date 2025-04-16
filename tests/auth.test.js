@@ -1,12 +1,10 @@
 const request = require('supertest');
-const app = require('../index');
+const app = require('../app');
 const connect = require('../db/connection');
 const User = require('../users/users.model');
 const mongoose = require('mongoose');
 
 beforeAll(async () => {
-  //   app.listen(3000, () => console.log('Listenning on port 3000')); ==> unecessary
-
   await connect();
 });
 
@@ -79,4 +77,33 @@ describe('Test LOGIN', () => {
   });
 });
 
+describe('TOKEN', () => {
+  const payload = {
+    email: 'token@gmail.com',
+    password: 'token',
+  };
+
+  it('Should return a token after signup', async () => {
+    const res = await request(app).post('/auth/signup').send(payload);
+
+    const headers = res.headers;
+    const token = headers['x-auth-token'];
+
+    expect(token).toBeTruthy();
+  });
+
+  it('Should return a token after login', async () => {
+    const res = await request(app).post('/auth/login').send(payload);
+
+    const headers = res.headers;
+    const token = headers['x-auth-token'];
+
+    expect(token).toBeTruthy();
+  });
+});
+
 // Test if a token is correctly sent to the client for signup/login
+
+// describe('test', () => {
+//   const token = new User().generateAuthToken();
+// });

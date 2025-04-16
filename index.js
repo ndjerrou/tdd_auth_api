@@ -1,12 +1,4 @@
-const express = require('express');
-const routerAuth = require('./users/users.route');
+const app = require('./app');
+require('./db/connection')();
 
-require('dotenv').config();
-
-const app = express();
-
-app.use(express.json());
-
-app.use('/auth', routerAuth);
-
-module.exports = app;
+app.listen(3000, () => console.log('Listenning on port 3000'));

@@ -25,9 +25,7 @@ module.exports = {
       const token = user.generateAuthToken();
 
       res.set('x-auth-token', token);
-      res.status(201).send({ ok: true, msg: 'User created' });
-
-      res.status(200).send();
+      res.status(200).send({ ok: true, msg: 'User Logged in' });
     } catch (err) {
       res.status(500).send(err.message);
     }
@@ -46,7 +44,6 @@ module.exports = {
         email,
         password,
       });
-
       const hashedPassword = await bcrypt.hash(password, 8);
 
       // Trigger a 500 error
@@ -64,8 +61,8 @@ module.exports = {
       }
 
       user.password = hashedPassword;
-      await user.save();
 
+      await user.save();
       const token = user.generateAuthToken();
 
       res.set('x-auth-token', token);
